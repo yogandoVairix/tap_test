@@ -7,4 +7,6 @@ class Project < ActiveRecord::Base
   has_many :locations, :through => :location_projects
 
   has_many :notification_templates, :dependent => :destroy
+
+  validates :name, presence: true
 end

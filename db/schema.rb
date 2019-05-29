@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_28_130634) do
+ActiveRecord::Schema.define(version: 2019_05_28_205742) do
 
   create_table "location_projects", force: :cascade do |t|
     t.integer "location_id"
@@ -30,11 +30,11 @@ ActiveRecord::Schema.define(version: 2019_05_28_130634) do
     t.string "address"
   end
 
-  create_table "notification_template_rols", force: :cascade do |t|
+  create_table "notification_template_roles", force: :cascade do |t|
     t.integer "notification_template_id"
-    t.integer "rol_id"
-    t.index ["notification_template_id"], name: "index_notification_template_rols_on_notification_template_id"
-    t.index ["rol_id"], name: "index_notification_template_rols_on_rol_id"
+    t.integer "role_id"
+    t.index ["notification_template_id"], name: "index_notification_template_roles_on_notification_template_id"
+    t.index ["role_id"], name: "index_notification_template_roles_on_role_id"
   end
 
   create_table "notification_templates", force: :cascade do |t|
@@ -46,10 +46,10 @@ ActiveRecord::Schema.define(version: 2019_05_28_130634) do
   create_table "project_users", force: :cascade do |t|
     t.integer "project_id"
     t.integer "user_id"
-    t.integer "rol_id"
+    t.integer "role_id"
     t.index ["project_id", "user_id"], name: "index_project_users_on_project_id_and_user_id", unique: true
     t.index ["project_id"], name: "index_project_users_on_project_id"
-    t.index ["rol_id"], name: "index_project_users_on_rol_id"
+    t.index ["role_id"], name: "index_project_users_on_role_id"
     t.index ["user_id"], name: "index_project_users_on_user_id"
   end
 
@@ -57,12 +57,31 @@ ActiveRecord::Schema.define(version: 2019_05_28_130634) do
     t.string "name"
   end
 
-  create_table "rols", force: :cascade do |t|
+  create_table "roles", force: :cascade do |t|
     t.string "name"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.integer "invited_by_id"
+    t.integer "invitations_count", default: 0
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invitations_count"], name: "index_users_on_invitations_count"
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
 end
