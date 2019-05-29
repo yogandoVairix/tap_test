@@ -10,21 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_28_205742) do
-
-  create_table "location_projects", force: :cascade do |t|
-    t.integer "location_id"
-    t.integer "project_id"
-    t.index ["location_id"], name: "index_location_projects_on_location_id"
-    t.index ["project_id"], name: "index_location_projects_on_project_id"
-  end
-
-  create_table "location_users", force: :cascade do |t|
-    t.integer "location_id"
-    t.integer "user_id"
-    t.index ["location_id"], name: "index_location_users_on_location_id"
-    t.index ["user_id"], name: "index_location_users_on_user_id"
-  end
+ActiveRecord::Schema.define(version: 2019_05_29_173237) do
 
   create_table "locations", force: :cascade do |t|
     t.string "address"
@@ -33,20 +19,22 @@ ActiveRecord::Schema.define(version: 2019_05_28_205742) do
   create_table "notification_template_roles", force: :cascade do |t|
     t.integer "notification_template_id"
     t.integer "role_id"
+    t.integer "project_id"
     t.index ["notification_template_id"], name: "index_notification_template_roles_on_notification_template_id"
+    t.index ["project_id"], name: "index_notification_template_roles_on_project_id"
     t.index ["role_id"], name: "index_notification_template_roles_on_role_id"
   end
 
   create_table "notification_templates", force: :cascade do |t|
     t.string "name"
-    t.integer "project_id"
-    t.index ["project_id"], name: "index_notification_templates_on_project_id"
   end
 
   create_table "project_users", force: :cascade do |t|
     t.integer "project_id"
     t.integer "user_id"
     t.integer "role_id"
+    t.integer "location_id"
+    t.index ["location_id"], name: "index_project_users_on_location_id"
     t.index ["project_id", "user_id"], name: "index_project_users_on_project_id_and_user_id", unique: true
     t.index ["project_id"], name: "index_project_users_on_project_id"
     t.index ["role_id"], name: "index_project_users_on_role_id"
@@ -59,6 +47,13 @@ ActiveRecord::Schema.define(version: 2019_05_28_205742) do
 
   create_table "roles", force: :cascade do |t|
     t.string "name"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "project_user_id"
+    t.integer "notification_template_role_id"
+    t.index ["notification_template_role_id"], name: "index_subscriptions_on_notification_template_role_id"
+    t.index ["project_user_id"], name: "index_subscriptions_on_project_user_id"
   end
 
   create_table "users", force: :cascade do |t|
